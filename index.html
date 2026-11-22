@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Konten AI Studio</title>
+<style>
+body{font-family:sans-serif;padding:20px;background:#f0f0f0}
+.box{background:white;padding:20px;border-radius:15px}
+input,select{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ddd}
+button{background:black;color:white;padding:14px;width:100%;border-radius:10px;font-size:16px}
+#hasil{background:#e8ffe8;padding:15px;border-radius:10px;margin-top:15px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<div class="box">
+<h2>🎬 Konten AI Studio</h2>
+<p>Untuk Aji Pramana & Family</p>
+<label>Topik Konten:</label>
+<input id="topik" placeholder="Contoh: Bersihin lantai biar kinclong">
+<label>Platform:</label>
+<select id="platform"><option>TikTok</option><option>Reels Instagram</option><option>Youtube Shorts</option></select>
+<button onclick="buat()">Buat Caption AI ✨</button>
+<div id="hasil">Hasilnya muncul di sini...</div>
+</div>
+<script>
+function buat(){
+let t=document.getElementById('topik').value || 'Keseharian keluarga';
+let p=document.getElementById('platform').value;
+document.getElementById('hasil').innerText = "🔥 JUDUL UNTUK "+p+":\n"+t+" | Wajib Nonton!\n\n📝 CAPTION:\nHalo guys! Hari ini kita bahas "+t+". Jangan lupa follow @aji96878 ya!\n\n#"+t.split(' ').join('')+" #AjiPramana #FYP #Viral";
+}
+</script>
+</body>
+</html>
