@@ -44,7 +44,7 @@ btn.disabled=true;btn.innerText='AI sedang mikir... ⏳';
 hasil.innerText='Sebentar ya, AI lagi nulis caption terbaik buat kamu...';
 let prompt=`Kamu adalah ahli konten viral Indonesia. Buatkan untuk platform ${platform} dengan topik: "${topik}". Buatkan: 1 JUDUL yang bikin orang penasaran, 1 CAPTION panjang yang menyentuh hati, Islami, memotivasi, gaya bahasa santai anak muda Indonesia, dan 10 HASHTAG yang relevan. Akhiri dengan ajakan untuk follow Aji Pramana.`;
 try{
-let res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})});
+let res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})});
 let data=await res.json();
 if(data.error){hasil.innerText='Error: '+data.error.message;}
 else{hasil.innerText=data.candidates[0].content.parts[0].text;}
