@@ -1,33 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Konten AI Studio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konten AI Studio - Aji Pramana</title>
 <style>
-body{font-family:sans-serif;padding:20px;background:#f0f0f0}
-.box{background:white;padding:20px;border-radius:15px}
-input,select{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ddd}
-button{background:black;color:white;padding:14px;width:100%;border-radius:10px;font-size:16px}
-#hasil{background:#e8ffe8;padding:15px;border-radius:10px;margin-top:15px;white-space:pre-wrap}
+body{font-family:sans-serif;background:#f0fdf4;margin:0;padding:15px}
+.card{background:white;max-width:600px;margin:auto;padding:20px;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+h1{font-size:22px;text-align:center}
+input,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:10px;box-sizing:border-box;font-size:15px}
+button{width:100%;padding:14px;background:#111;color:white;border:none;border-radius:12px;font-size:16px;font-weight:bold}
+button:disabled{opacity:0.5}
+#hasil{background:#ecfdf5;padding:15px;border-radius:12px;margin-top:15px;white-space:pre-wrap;min-height:100px}
+.copyBtn{background:#16a34a;margin-top:10px}
 </style>
 </head>
 <body>
-<div class="box">
-<h2>🎬 Konten AI Studio</h2>
-<p>Untuk Aji Pramana & Family</p>
+<div class="card">
+<h1>✨ Konten AI Studio<br><span style="font-size:14px;font-weight:normal">Untuk Aji Pramana & Family</span></h1>
+<label>🔑 Kunci API Gemini Kamu:</label>
+<input type="password" id="apiKey" placeholder="Paste AIza... kamu di sini">
 <label>Topik Konten:</label>
-<input id="topik" placeholder="Contoh: Bersihin lantai biar kinclong">
+<input type="text" id="topik" placeholder="Contoh: Menjadi operator cleaning service yang Allah ridhoi">
 <label>Platform:</label>
-<select id="platform"><option>TikTok</option><option>Reels Instagram</option><option>Youtube Shorts</option></select>
-<button onclick="buat()">Buat Caption AI ✨</button>
-<div id="hasil">Hasilnya muncul di sini...</div>
+<select id="platform"><option>TikTok</option><option>Youtube Shorts</option><option>Instagram Reels</option><option>Facebook</option></select>
+<button id="btn" onclick="buat()">Buat Caption AI Beneran ✨</button>
+<div id="hasil">Hasil AI beneran akan muncul di sini...</div>
+<button class="copyBtn" onclick="salin()">📋 Salin Caption</button>
 </div>
 <script>
-function buat(){
-let t=document.getElementById('topik').value || 'Keseharian keluarga';
-let p=document.getElementById('platform').value;
-document.getElementById('hasil').innerText = "🔥 JUDUL UNTUK "+p+":\n"+t+" | Wajib Nonton!\n\n📝 CAPTION:\nHalo guys! Hari ini kita bahas "+t+". Jangan lupa follow @aji96878 ya!\n\n#"+t.split(' ').join('')+" #AjiPramana #FYP #Viral";
+let keyInput=document.getElementById('apiKey');
+keyInput.value=localStorage.getItem('gemini_key')||'';
+keyInput.oninput=()=>localStorage.setItem('gemini_key',keyInput.value);
+async function buat(){
+let key=keyInput.value.trim();
+let topik=document.getElementById('topik').value.trim();
+let platform=document.getElementById('platform').value;
+let hasil=document.getElementById('hasil');
+let btn=document.getElementById('btn');
+if(!key){alert('Paste dulu Kunci API Gemini kamu di atas!');return;}
+if(!topik){alert('Isi dulu Topiknya!');return;}
+btn.disabled=true;btn.innerText='AI sedang mikir... ⏳';
+hasil.innerText='Sebentar ya, AI lagi nulis caption terbaik buat kamu...';
+let prompt=`Kamu adalah ahli konten viral Indonesia. Buatkan untuk platform ${platform} dengan topik: "${topik}". Buatkan: 1 JUDUL yang bikin orang penasaran, 1 CAPTION panjang yang menyentuh hati, Islami, memotivasi, gaya bahasa santai anak muda Indonesia, dan 10 HASHTAG yang relevan. Akhiri dengan ajakan untuk follow Aji Pramana.`;
+try{
+let res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})});
+let data=await res.json();
+if(data.error){hasil.innerText='Error: '+data.error.message;}
+else{hasil.innerText=data.candidates[0].content.parts[0].text;}
+}catch(e){hasil.innerText='Gagal konek: '+e.message;}
+btn.disabled=false;btn.innerText='Buat Caption AI Beneran ✨';
 }
+function salin(){navigator.clipboard.writeText(document.getElementById('hasil').innerText);alert('Udah ke-copy! Tinggal paste ke TikTok!');}
 </script>
 </body>
 </html>
